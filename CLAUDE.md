@@ -73,6 +73,43 @@ casti a pomocne moduly:
 - Projekty z databazy: importuj `sql/schema.sql`, vypln `db` v configu a nastav
   `use_db_projects = true`.
 
+## Nahravanie na hosting (SFTP)
+
+Na webserveri NIE je git ani pristup cez konzolu - stranka sa nahrava rucne cez SFTP.
+Zachovaj presne rovnaku strukturu priecinkov ako v projekte. Nahravaju sa IBA subory
+potrebne pre chod stranky (nie vyvojove/git subory).
+
+NAHRAT (potrebne pre chod):
+- `index.php`
+- `css/style.css`
+- `js/main.js`
+- `img/` (obrazky, napr. `img/michal-dobsovic.jpg`)
+- `inc/bootstrap.php`
+- `inc/helpers.php`
+- `inc/mailer.php`
+- `inc/Projects.php`
+- `inc/partials/header.php`
+- `inc/partials/footer.php`
+- `inc/.htaccess`
+- `inc/config.php` - VYTVORIT priamo na serveri z `config.sample.php` a vyplnit hesla
+  (nie je v gite; ak sa upravuje lokalne, nahrat tiez)
+- `api/kontakt.php`
+- `lib/.htaccess`
+- `lib/PHPMailer/PHPMailer.php`
+- `lib/PHPMailer/SMTP.php`
+- `lib/PHPMailer/Exception.php`
+
+VOLITELNE:
+- `inc/db.php` a `sql/schema.sql` - az ked sa zapnu projekty z databazy (`use_db_projects = true`)
+- `inc/config.sample.php` - hodi sa ako vzor na serveri
+- `lib/PHPMailer/LICENSE` - kvoli licencnej cistote (odporucane ponechat)
+
+NENAHRAVAT (zbytocne / nepatria na web):
+- `.git/`, `.gitignore`, `.gitattributes`
+- `CLAUDE.md`, `README.txt`
+- `.claude/`
+- pripadne lokalne vyvojove subory
+
 ## Lokalny vyvoj a testovanie
 
 - Na PC zatial nie je lokalne PHP, preto sa `index.php` neda zobrazit cez `file://`
