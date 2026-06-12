@@ -7,6 +7,9 @@ secrets.php
 *.key
 *.pem
 
+# Konfiguracia s heslami (SMTP/DB) - iba lokalne/na hostingu, nikdy do gitu
+inc/config.php
+
 # OS subory
 Thumbs.db
 ehthumbs.db

@@ -1,0 +1,12 @@
+# Zakaz priameho pristupu cez prehliadac ku kniznicam v tomto priecinku (Apache).
+
+# Apache 2.4+
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+
+# Apache 2.2 (starsie)
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

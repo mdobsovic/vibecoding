@@ -1,42 +1,16 @@
-<!DOCTYPE html>
-<html lang="sk">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Osobna stranka a rozcestnik projektov Michala Dobsovica - lektora IT skoleni.">
-  <title>Michal Dobšovič — IT lektor a rozcestník projektov</title>
+<?php
+require __DIR__ . '/inc/bootstrap.php';
+require __DIR__ . '/inc/Projects.php';
 
-  <!-- Pisma: Manrope (text) a JetBrains Mono (ukazky kodu) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+$projekty = Projects::all();
 
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+// Flash sprava a povodne hodnoty po odoslani bez JavaScriptu (fallback z api/kontakt.php)
+$flash = $_SESSION['flash'] ?? null;
+$old   = $_SESSION['old'] ?? [];
+unset($_SESSION['flash'], $_SESSION['old']);
 
-  <!-- Kotva uplne na vrchu stranky (mimo sticky hlavicky, aby skrolovanie hore fungovalo) -->
-  <span id="top"></span>
-
-  <!-- Navigacia -->
-  <header class="site-header">
-    <nav class="nav container">
-      <a href="#top" class="nav__logo">
-        <span class="nav__logo-mark">MD</span>
-        <span class="nav__logo-text">Michal Dobšovič</span>
-      </a>
-
-      <button class="nav__toggle" id="navToggle" aria-label="Otvoriť menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-
-      <ul class="nav__menu" id="navMenu">
-        <li><a href="#o-mne">O mne</a></li>
-        <li><a href="#projekty">Projekty</a></li>
-        <li><a href="#kontakt" class="nav__cta">Kontakt</a></li>
-      </ul>
-    </nav>
-  </header>
+require __DIR__ . '/inc/partials/header.php';
+?>
 
   <main>
 
@@ -111,46 +85,27 @@
           <p class="section__subtitle">Výber projektov, ktorý budem postupne dopĺňať.</p>
         </header>
 
-        <!-- Ukazkove karty - obsah sa doplni neskor v ramci funkcionality Projekty -->
+        <!-- Karty sa generuju z Projects::all() (zatial staticke pole, neskor z databazy) -->
         <div class="projects">
+          <?php foreach ($projekty as $p): ?>
           <article class="project-card">
+            <?php if (!empty($p['tag'])): ?>
             <div class="project-card__top">
-              <span class="project-card__tag">Pripravuje sa</span>
+              <span class="project-card__tag"><?= e($p['tag']) ?></span>
             </div>
-            <h3 class="project-card__title">Názov projektu</h3>
-            <p class="project-card__desc">
-              Krátky popis projektu sa zobrazí tu. Karty budú doplnené neskôr.
-            </p>
+            <?php endif; ?>
+            <h3 class="project-card__title"><?= e($p['nazov']) ?></h3>
+            <p class="project-card__desc"><?= e($p['popis']) ?></p>
+            <?php if (!empty($p['tech'])): ?>
             <div class="project-card__tech">
-              <span>HTML</span><span>CSS</span><span>JS</span>
+              <?php foreach ($p['tech'] as $t): ?><span><?= e($t) ?></span><?php endforeach; ?>
             </div>
+            <?php endif; ?>
+            <?php if (!empty($p['url'])): ?>
+            <a class="project-card__link" href="<?= e($p['url']) ?>" target="_blank" rel="noopener">Zobraziť projekt →</a>
+            <?php endif; ?>
           </article>
-
-          <article class="project-card">
-            <div class="project-card__top">
-              <span class="project-card__tag">Pripravuje sa</span>
-            </div>
-            <h3 class="project-card__title">Názov projektu</h3>
-            <p class="project-card__desc">
-              Krátky popis projektu sa zobrazí tu. Karty budú doplnené neskôr.
-            </p>
-            <div class="project-card__tech">
-              <span>PHP</span><span>MariaDB</span>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="project-card__top">
-              <span class="project-card__tag">Pripravuje sa</span>
-            </div>
-            <h3 class="project-card__title">Názov projektu</h3>
-            <p class="project-card__desc">
-              Krátky popis projektu sa zobrazí tu. Karty budú doplnené neskôr.
-            </p>
-            <div class="project-card__tech">
-              <span>MikroTik</span><span>Siete</span>
-            </div>
-          </article>
+          <?php endforeach; ?>
         </div>
       </div>
     </section>
@@ -164,32 +119,51 @@
         </header>
 
         <div class="contact">
-          <!-- Vizualny navrh formulara. Odosielanie sa doplni neskor (PHP). -->
-          <form class="contact-form" id="contactForm" novalidate>
+          <!-- Kontaktny formular. Odosielanie cez fetch (js/main.js), s fallbackom na klasicky POST. -->
+          <form class="contact-form" id="contactForm" action="api/kontakt.php" method="post" novalidate>
+
+            <?php if ($flash): ?>
+            <div class="form-status form-status--<?= e($flash['type']) ?>" role="alert">
+              <?= e($flash['message']) ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- CSRF token proti podvrhnutiu formulara -->
+            <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+            <!-- Casova znacka pre anti-spam (prilis rychle odoslanie = bot) -->
+            <input type="hidden" name="ts" value="<?= time() ?>">
+
+            <!-- Honeypot - skryte pole, ktore ludia nevidia; ak ho bot vyplni, spravu odmietneme -->
+            <div class="hp-field" aria-hidden="true">
+              <label>Webová stránka <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+
             <div class="form-row">
               <label class="form-field">
                 <span class="form-field__label">Meno</span>
-                <input type="text" name="meno" placeholder="Tvoje meno" required>
+                <input type="text" name="meno" placeholder="Tvoje meno" required
+                       value="<?= e($old['meno'] ?? '') ?>">
               </label>
 
               <label class="form-field">
                 <span class="form-field__label">E-mail</span>
-                <input type="email" name="email" placeholder="tvoj@email.sk" required>
+                <input type="email" name="email" placeholder="tvoj@email.sk" required
+                       value="<?= e($old['email'] ?? '') ?>">
               </label>
             </div>
 
             <label class="form-field">
               <span class="form-field__label">Predmet</span>
-              <input type="text" name="predmet" placeholder="O čo ide?">
+              <input type="text" name="predmet" placeholder="O čo ide?"
+                     value="<?= e($old['predmet'] ?? '') ?>">
             </label>
 
             <label class="form-field">
               <span class="form-field__label">Správa</span>
-              <textarea name="sprava" rows="5" placeholder="Tvoja správa..." required></textarea>
+              <textarea name="sprava" rows="5" placeholder="Tvoja správa..." required><?= e($old['sprava'] ?? '') ?></textarea>
             </label>
 
             <button type="submit" class="btn btn--primary btn--full">Odoslať správu</button>
-            <p class="contact-form__note">Odosielanie formulára bude doplnené v ďalšom kroku.</p>
           </form>
 
           <aside class="contact-info">
@@ -211,14 +185,4 @@
 
   </main>
 
-  <!-- Paticka -->
-  <footer class="site-footer">
-    <div class="container site-footer__inner">
-      <p>© <span id="year"></span> Michal Dobšovič</p>
-      <a href="#top" class="site-footer__up">Späť hore ↑</a>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
-</body>
-</html>
+<?php require __DIR__ . '/inc/partials/footer.php'; ?>
