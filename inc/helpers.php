@@ -11,7 +11,7 @@ defined('APP') || exit;
  * DOLEZITE: pri KAZDEJ zmene css/js suborov toto cislo ZVYS (napr. '1.0.1'),
  * aby prehliadace nacitali novu verziu a nepouzili stary subor z cache.
  */
-defined('ASSET_VERSION') || define('ASSET_VERSION', '1.0.0');
+defined('ASSET_VERSION') || define('ASSET_VERSION', '1.0.2');
 
 /**
  * Escape pre bezpecny vystup do HTML (ochrana proti XSS).
