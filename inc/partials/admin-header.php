@@ -22,8 +22,8 @@ $adminLogged = $adminLogged ?? is_admin();
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
-  <link rel="stylesheet" href="<?= e(asset('css/admin.css')) ?>">
+  <link rel="stylesheet" href="<?= e(asset_v('css/style.css')) ?>">
+  <link rel="stylesheet" href="<?= e(asset_v('css/admin.css')) ?>">
   <?php if ($adminEditor): ?>
   <link rel="stylesheet" href="<?= e(asset('vendor/trix/trix.css')) ?>">
   <?php endif; ?>

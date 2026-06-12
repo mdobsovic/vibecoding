@@ -148,4 +148,84 @@
         });
     });
   }
+
+  // ---------- Lightbox pre galeriu obrazkov (detail projektu) ----------
+  var galleryLinks = document.querySelectorAll("[data-lightbox]");
+  if (galleryLinks.length) {
+    var overlay = null;
+    var overlayImg = null;
+    var overlayCaption = null;
+
+    // Vytvori overlay az pri prvom pouziti (setri DOM, ked sa nepouziva)
+    function buildOverlay() {
+      overlay = document.createElement("div");
+      overlay.className = "lightbox";
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+
+      var closeBtn = document.createElement("button");
+      closeBtn.type = "button";
+      closeBtn.className = "lightbox__close";
+      closeBtn.setAttribute("aria-label", "Zavriet");
+      closeBtn.innerHTML = "&times;";
+
+      overlayImg = document.createElement("img");
+      overlayImg.className = "lightbox__img";
+      overlayImg.alt = "";
+
+      overlayCaption = document.createElement("p");
+      overlayCaption.className = "lightbox__caption";
+
+      var inner = document.createElement("div");
+      inner.className = "lightbox__inner";
+      inner.appendChild(overlayImg);
+      inner.appendChild(overlayCaption);
+
+      overlay.appendChild(closeBtn);
+      overlay.appendChild(inner);
+      document.body.appendChild(overlay);
+
+      // Zatvaranie: tlacidlo, klik mimo obrazka
+      closeBtn.addEventListener("click", closeLightbox);
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) {
+          closeLightbox();
+        }
+      });
+    }
+
+    function openLightbox(src, caption) {
+      if (!overlay) {
+        buildOverlay();
+      }
+      overlayImg.src = src;
+      overlayImg.alt = caption || "";
+      overlayCaption.textContent = caption || "";
+      overlayCaption.style.display = caption ? "" : "none";
+      overlay.classList.add("is-open");
+      document.body.classList.add("has-lightbox");
+    }
+
+    function closeLightbox() {
+      if (overlay) {
+        overlay.classList.remove("is-open");
+        document.body.classList.remove("has-lightbox");
+        overlayImg.src = "";
+      }
+    }
+
+    galleryLinks.forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        openLightbox(link.getAttribute("href"), link.getAttribute("data-caption") || "");
+      });
+    });
+
+    // Zavretie klavesou Esc
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && overlay && overlay.classList.contains("is-open")) {
+        closeLightbox();
+      }
+    });
+  }
 })();

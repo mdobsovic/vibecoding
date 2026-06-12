@@ -35,8 +35,10 @@ Michal Dobsovic je lektor v IT LEARNING SLOVAKIA (www.itlearning.sk) a zameriava
 2. [HOTOVO] Funkcionalita kontaktneho formulara + prechod zo statickej stranky na PHP.
 3. [HOTOVO] Funkcionalita "Moje projekty" - projekty sa citaju z databazy, kazdy ma vlastnu
    detailnu podstranku (`/projekt/<slug>`) a admin rozhranie na `/admin` (prihlasenie + CRUD).
-4. [PRIPRAVENE] Galeria obrazkov k projektom - DB tabulka `projekt_obrazky` je pripravena,
-   zostava doplnit nahravanie a spravu obrazkov v adminovi a ich zobrazenie na detaile.
+4. [HOTOVO] Galeria obrazkov k projektom - nahravanie a sprava obrazkov v adminovi
+   (na editacii projektu), zobrazenie na detaile projektu s lightboxom. Subory sa ukladaju
+   do priecinka `/galeria` (mimo gitu), v DB (`projekt_obrazky`) je len nazov suboru.
+   Limit 2 MB/obrazok, povolene formaty JPG/PNG/WEBP/GIF.
 
 ## Struktura projektu
 
@@ -49,21 +51,39 @@ casti a pomocne moduly:
 - `inc/bootstrap.php` - spolocny zaklad (nacita config, session, helpers); volat na zaciatku kazdeho PHP vstupu
 - `inc/config.sample.php` - VZOR konfiguracie (commituje sa)
 - `inc/config.php` - SKUTOCNA konfiguracia s heslami (SMTP/DB/admin); je v `.gitignore`, NIKDY sa necommituje
-- `inc/helpers.php` - `e()`, `csrf_token()`, `csrf_check()`, `json_response()`, `is_ajax()`, `asset()`, `slugify()`
+- `inc/helpers.php` - `e()`, `csrf_token()`, `csrf_check()`, `json_response()`, `is_ajax()`, `asset()`, `asset_v()`, `slugify()`, `gallery_dir()`, `gallery_url()`; konstanta `ASSET_VERSION` (verzia CSS/JS)
 - `inc/mailer.php` - `send_contact_mail()` (odoslanie cez SMTP pomocou PHPMailer)
 - `inc/db.php` - `db()` lazy PDO pripojenie (projekty z DB)
 - `inc/Projects.php` - repozitar projektov (`all()`, `findBySlug()`, admin CRUD)
+- `inc/ProjectImages.php` - repozitar obrazkov galerie (`forProject()`, `add()`, `updateMeta()`, `delete()`)
 - `inc/admin_auth.php` - prihlasenie do admina (`is_admin()`, `admin_login()`, `require_admin()`, `admin_logout()`)
 - `inc/partials/header.php`, `inc/partials/footer.php` - spolocne casti verejnej stranky
 - `inc/partials/admin-header.php`, `inc/partials/admin-footer.php` - spolocne casti admin rozhrania
 - `admin/` - admin rozhranie: `login.php`, `logout.php`, `index.php` (zoznam),
-  `projekt-form.php` (formular), `projekt-save.php`, `projekt-delete.php`
+  `projekt-form.php` (formular vratane spravy galerie), `projekt-save.php`, `projekt-delete.php`,
+  `obrazok-upload.php` (nahratie obrazkov), `obrazok-save.php` (alt + poradie), `obrazok-delete.php`
 - `api/kontakt.php` - spracovanie kontaktneho formulara (validacia, anti-spam, odoslanie)
 - `lib/PHPMailer/` - prilozena kniznica na odosielanie e-mailov (bez Composera; serverova, nepristupna z webu)
 - `vendor/trix/` - WYSIWYG editor Trix (CSS + JS), nacitavany prehliadacom v adminovi
 - `tools/make-hash.php` - pomocnik na vygenerovanie hashu admin hesla (po pouziti ZMAZAT, nenahravat)
 - `sql/schema.sql` - schema databazy (`projekty`, `projekt_obrazky`)
+- `galeria/` - nahrate obrazky galerie (obsah je mimo gitu); obsahuje ochranny `.htaccess`
+  (zakaz spustania skriptov) a `.gitkeep` (zachovanie priecinka)
 - `css/style.css`, `css/admin.css`, `js/`, `img/` - styly, skripty, obrazky
+
+## Verziovanie assetov (cache-busting)
+
+Vlastne CSS/JS subory sa do stranky pripajaju cez `asset_v()`, ktore za cestu prida `?v=ASSET_VERSION`
+(napr. `css/style.css?v=1.0.0`). Vdaka tomu prehliadace po zmene suboru nacitaju novu verziu a netreba
+rucne cistit cache.
+
+**DOLEZITE:** Pri KAZDEJ zmene obsahu `css/style.css`, `css/admin.css` alebo `js/main.js` ZVYS
+konstantu `ASSET_VERSION` v `inc/helpers.php` (napr. z `'1.0.0'` na `'1.0.1'`). Bez zvysenia verzie
+moze navstevnik dostat stary subor z cache.
+
+- Verziuju sa len vlastne subory cez `asset_v()`. Kniznice tretich stran (napr. `vendor/trix/*`)
+  sa pripajaju cez obycajne `asset()` bez verzie - su staticke a nemenia sa.
+- Konvencia verzie: `major.minor.patch` (staci postupne zvysovat, napr. 1.0.0 -> 1.0.1 -> 1.0.2).
 
 ## Konfiguracia a nasadenie
 
@@ -114,8 +134,13 @@ NAHRAT (potrebne pre chod):
 - `inc/config.php` - VYTVORIT priamo na serveri z `config.sample.php` a vyplnit hesla
   (nie je v gite; ak sa upravuje lokalne, nahrat tiez)
 - `api/kontakt.php`
+- `inc/ProjectImages.php`
 - `admin/login.php`, `admin/logout.php`, `admin/index.php`,
-  `admin/projekt-form.php`, `admin/projekt-save.php`, `admin/projekt-delete.php`
+  `admin/projekt-form.php`, `admin/projekt-save.php`, `admin/projekt-delete.php`,
+  `admin/obrazok-upload.php`, `admin/obrazok-save.php`, `admin/obrazok-delete.php`
+- `galeria/.htaccess` - ochrana priecinka s obrazkami (zakaz spustania skriptov)
+- priecinok `galeria/` musi byt na serveri ZAPISOVATELNY (web server don nahrava obrazky).
+  Samotne obrazky v nom su mimo gitu; na server sa nahravaju cez admin, netreba ich kopirovat rucne.
 - `vendor/trix/trix.css`, `vendor/trix/trix.umd.min.js`
 - `sql/schema.sql` (na import do DB)
 - `lib/.htaccess`

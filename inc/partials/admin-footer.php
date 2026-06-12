@@ -12,7 +12,7 @@ $adminEditor = $adminEditor ?? false;
     </div>
   </footer>
 
-  <script src="<?= e(asset('js/main.js')) ?>"></script>
+  <script src="<?= e(asset_v('js/main.js')) ?>"></script>
   <?php if ($adminEditor): ?>
   <script type="text/javascript" src="<?= e(asset('vendor/trix/trix.umd.min.js')) ?>"></script>
   <?php endif; ?>

@@ -1,0 +1,27 @@
+# Priecinok s nahratymi obrazkami galerie.
+# Bezpecnost: povolene su len staticke subory, ziadne spustanie skriptov.
+
+# Vypnutie PHP (ak by sa sem omylom/utokom dostal .php subor).
+# Obalene v IfModule, aby na hostingu s PHP-FPM nedoslo k chybe 500.
+<IfModule mod_php7.c>
+    php_admin_flag engine off
+</IfModule>
+<IfModule mod_php.c>
+    php_admin_flag engine off
+</IfModule>
+
+# Zakaz priameho spustenia/servirovania skriptovacich suborov.
+<FilesMatch "(?i)\.(php|phtml|php3|php4|php5|php7|phps|cgi|pl|py|sh|asp|aspx)$">
+    # Apache 2.4+
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    # Apache 2.2 (starsie)
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Bez vypisu obsahu priecinka
+Options -Indexes

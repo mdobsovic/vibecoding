@@ -11,6 +11,9 @@ defined('APP') || exit;
 /**
  * Vrati zdielanu instanciu PDO pripojenia k databaze.
  */
+// Strazne if kvoli tomu, ze tento subor sa nacitava cez 'require' z viacerych metod;
+// bez neho by opakovane nacitanie v jednej poziadavke skoncilo chybou "Cannot redeclare db()".
+if (!function_exists('db')) {
 function db(): PDO
 {
     static $pdo = null;
@@ -36,4 +39,5 @@ function db(): PDO
     ]);
 
     return $pdo;
+}
 }

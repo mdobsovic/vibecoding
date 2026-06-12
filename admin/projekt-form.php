@@ -2,6 +2,7 @@
 require __DIR__ . '/../inc/bootstrap.php';
 require __DIR__ . '/../inc/admin_auth.php';
 require __DIR__ . '/../inc/Projects.php';
+require __DIR__ . '/../inc/ProjectImages.php';
 
 require_admin();
 
@@ -23,6 +24,10 @@ $old    = $_SESSION['form_old'] ?? null;
 $errors = $_SESSION['form_errors'] ?? [];
 unset($_SESSION['form_old'], $_SESSION['form_errors']);
 
+// Flash sprava (napr. z akcii galerie - nahratie/uprava/zmazanie obrazka)
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);
+
 // Zdroj predvyplnenych hodnot: stare (po chybe) -> existujuci zaznam -> prazdne defaulty
 $src = $old ?? $existing ?? [];
 $v = static function (string $key, $default = '') use ($src) {
@@ -40,6 +45,10 @@ require __DIR__ . '/../inc/partials/admin-header.php';
     <h1 class="admin-title"><?= $isEdit ? 'Upraviť projekt' : 'Nový projekt' ?></h1>
     <a class="btn btn--ghost" href="<?= e(asset('admin/')) ?>">← Späť na zoznam</a>
   </div>
+
+  <?php if ($flash): ?>
+  <div class="form-status form-status--<?= e($flash['type']) ?>" role="alert"><?= e($flash['message']) ?></div>
+  <?php endif; ?>
 
   <?php if ($errors): ?>
   <div class="form-status form-status--error" role="alert">Skontrolujte prosím vyznačené polia.</div>
@@ -113,5 +122,65 @@ require __DIR__ . '/../inc/partials/admin-header.php';
       <a class="btn btn--ghost" href="<?= e(asset('admin/')) ?>">Zrušiť</a>
     </div>
   </form>
+
+  <!-- Galeria obrazkov - dostupna az po prvom ulozeni projektu (potrebujeme id) -->
+  <section class="admin-gallery">
+    <h2 class="admin-subtitle">Galéria obrázkov</h2>
+
+    <?php if (!$isEdit): ?>
+    <p class="admin-gallery__note">Najprv uložte projekt — potom sem budete môcť nahrať obrázky.</p>
+    <?php else: ?>
+
+    <form class="gallery-upload" action="<?= e(asset('admin/obrazok-upload.php')) ?>" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+      <input type="hidden" name="projekt_id" value="<?= (int) $id ?>">
+      <label class="form-field">
+        <span class="form-field__label">Pridať obrázky</span>
+        <input type="file" name="obrazky[]" accept="image/jpeg,image/png,image/webp,image/gif" multiple required>
+        <small class="form-field__hint">Povolené: JPG, PNG, WEBP, GIF. Max. 2 MB na obrázok. Naraz môžete vybrať viac súborov.</small>
+      </label>
+      <button type="submit" class="btn btn--primary">Nahrať</button>
+    </form>
+
+    <?php $obrazky = ProjectImages::forProject($id); ?>
+    <?php if (!$obrazky): ?>
+    <p class="admin-gallery__note">Zatiaľ tu nie sú žiadne obrázky.</p>
+    <?php else: ?>
+    <div class="gallery-grid">
+      <?php foreach ($obrazky as $img): ?>
+      <div class="gallery-card">
+        <div class="gallery-card__thumb">
+          <img src="<?= e(gallery_url($img['subor'])) ?>" alt="<?= e($img['alt']) ?>" loading="lazy">
+        </div>
+
+        <form class="gallery-card__meta" action="<?= e(asset('admin/obrazok-save.php')) ?>" method="post">
+          <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+          <input type="hidden" name="projekt_id" value="<?= (int) $id ?>">
+          <input type="hidden" name="id" value="<?= (int) $img['id'] ?>">
+          <label class="form-field">
+            <span class="form-field__label">Popis (alt)</span>
+            <input type="text" name="alt" maxlength="200" value="<?= e($img['alt']) ?>" placeholder="napr. Ukážka administrácie">
+          </label>
+          <label class="form-field form-field--narrow">
+            <span class="form-field__label">Poradie</span>
+            <input type="number" name="poradie" value="<?= (int) $img['poradie'] ?>" step="1">
+          </label>
+          <button type="submit" class="btn btn--ghost btn--sm">Uložiť</button>
+        </form>
+
+        <form class="gallery-card__delete" action="<?= e(asset('admin/obrazok-delete.php')) ?>" method="post"
+              onsubmit="return confirm('Naozaj zmazať tento obrázok?');">
+          <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+          <input type="hidden" name="projekt_id" value="<?= (int) $id ?>">
+          <input type="hidden" name="id" value="<?= (int) $img['id'] ?>">
+          <button type="submit" class="btn btn--danger btn--sm">Zmazať</button>
+        </form>
+      </div>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+
+    <?php endif; ?>
+  </section>
 
 <?php require __DIR__ . '/../inc/partials/admin-footer.php'; ?>

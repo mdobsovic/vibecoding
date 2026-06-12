@@ -10,6 +10,12 @@ secrets.php
 # Konfiguracia s heslami (SMTP/DB) - iba lokalne/na hostingu, nikdy do gitu
 inc/config.php
 
+# Nahrate obrazky galerie projektov - obsah priecinka nepatri do gitu.
+# Ponechame len strukturu priecinka a jeho ochranny .htaccess.
+/galeria/*
+!/galeria/.gitkeep
+!/galeria/.htaccess
+
 # OS subory
 Thumbs.db
 ehthumbs.db

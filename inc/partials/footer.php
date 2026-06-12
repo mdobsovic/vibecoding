@@ -10,6 +10,6 @@ defined('APP') || exit;
     </div>
   </footer>
 
-  <script src="<?= e(asset('js/main.js')) ?>"></script>
+  <script src="<?= e(asset_v('js/main.js')) ?>"></script>
 </body>
 </html>

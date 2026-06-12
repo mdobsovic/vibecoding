@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/inc/bootstrap.php';
 require __DIR__ . '/inc/Projects.php';
+require __DIR__ . '/inc/ProjectImages.php';
 
 // Detail projektu sa zobrazuje vzdy z databazy
 $slug = isset($_GET['slug']) ? (string) $_GET['slug'] : '';
@@ -76,7 +77,21 @@ require __DIR__ . '/inc/partials/header.php';
         </div>
         <?php endif; ?>
 
-        <!-- Miesto pre galeriu obrazkov (pripravene na dalsi krok) -->
+        <!-- Galeria obrazkov projektu -->
+        <?php $obrazky = isset($p['id']) ? ProjectImages::forProject((int) $p['id']) : []; ?>
+        <?php if ($obrazky): ?>
+        <section class="project-gallery" aria-label="Galéria obrázkov">
+          <h2 class="project-gallery__title">Galéria</h2>
+          <div class="project-gallery__grid">
+            <?php foreach ($obrazky as $img): ?>
+            <a class="project-gallery__item" href="<?= e(gallery_url($img['subor'])) ?>"
+               data-lightbox<?= $img['alt'] !== '' ? ' data-caption="' . e($img['alt']) . '"' : '' ?>>
+              <img src="<?= e(gallery_url($img['subor'])) ?>" alt="<?= e($img['alt']) ?>" loading="lazy">
+            </a>
+            <?php endforeach; ?>
+          </div>
+        </section>
+        <?php endif; ?>
 
       </div>
     </article>

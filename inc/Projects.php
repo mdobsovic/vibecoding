@@ -163,14 +163,28 @@ class Projects
     }
 
     /**
-     * Zmaze projekt (suvisiace obrazky sa zmazu cez ON DELETE CASCADE).
+     * Zmaze projekt. DB zaznamy obrazkov sa zmazu cez ON DELETE CASCADE,
+     * ale samotne subory na disku treba odstranit rucne (este pred mazanim).
      */
     public static function delete(int $id): void
     {
         require_once __DIR__ . '/db.php';
+        require_once __DIR__ . '/ProjectImages.php';
+
+        // Najprv pozbierame nazvy suborov, kym este existuju v DB
+        $subory = ProjectImages::fileNamesForProject($id);
 
         $stmt = db()->prepare('DELETE FROM projekty WHERE id = ?');
         $stmt->execute([$id]);
+
+        // Zmazanie suborov z priecinka galerie (chyba nie je fatalna)
+        $dir = gallery_dir();
+        foreach ($subory as $subor) {
+            $cesta = $dir . '/' . basename((string) $subor);
+            if (is_file($cesta)) {
+                @unlink($cesta);
+            }
+        }
     }
 
     /**

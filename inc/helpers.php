@@ -6,6 +6,13 @@ defined('APP') || exit;
  * Pomocne funkcie pouzivane napriec aplikaciou.
  */
 
+/*
+ * Verzia statickych assetov (CSS/JS) pre cache-busting.
+ * DOLEZITE: pri KAZDEJ zmene css/js suborov toto cislo ZVYS (napr. '1.0.1'),
+ * aby prehliadace nacitali novu verziu a nepouzili stary subor z cache.
+ */
+defined('ASSET_VERSION') || define('ASSET_VERSION', '1.0.0');
+
 /**
  * Escape pre bezpecny vystup do HTML (ochrana proti XSS).
  */
@@ -66,6 +73,34 @@ function asset(string $path): string
     $base = isset($config['base_url']) && $config['base_url'] !== '' ? $config['base_url'] : '/';
     // Kotvy a absolutne URL nechame tak (napr. '#kontakt' nizsie riesi base osobitne)
     return rtrim($base, '/') . '/' . ltrim($path, '/');
+}
+
+/**
+ * Absolutna cesta k priecinku s nahratymi obrazkami galerie (na disku servera).
+ * helpers.php je v inc/, takze koren projektu je o uroven vyssie.
+ */
+function gallery_dir(): string
+{
+    return dirname(__DIR__) . '/galeria';
+}
+
+/**
+ * URL adresa obrazka galerie pre vystup do HTML (respektuje base_url).
+ * Priklad: gallery_url('projekt5-abcd.jpg') -> '/galeria/projekt5-abcd.jpg'
+ */
+function gallery_url(string $file): string
+{
+    return asset('galeria/' . $file);
+}
+
+/**
+ * Ako asset(), ale prida verziu pre cache-busting (?v=ASSET_VERSION).
+ * Pouzivaj pre vlastne CSS/JS subory, ktore sa menia (style.css, admin.css, main.js).
+ * Priklad: asset_v('css/style.css') -> '/css/style.css?v=1.0.0'
+ */
+function asset_v(string $path): string
+{
+    return asset($path) . '?v=' . ASSET_VERSION;
 }
 
 /**

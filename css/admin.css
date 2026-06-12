@@ -178,6 +178,78 @@ trix-toolbar .trix-button-group {
   text-align: center;
 }
 
+/* ---------- Galeria obrazkov v adminovi ---------- */
+.admin-gallery {
+  max-width: 760px;
+  margin-top: 28px;
+}
+.admin-subtitle {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 16px;
+}
+.admin-gallery__note {
+  background: var(--c-surface);
+  border: 1px dashed var(--c-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  color: var(--c-text-soft);
+}
+
+.gallery-upload {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.gallery-upload .btn { justify-self: start; }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+.gallery-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.gallery-card__thumb {
+  aspect-ratio: 4 / 3;
+  background: var(--c-bg-alt);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.gallery-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gallery-card__meta {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.gallery-card__meta .form-field { gap: 4px; }
+.gallery-card__meta .form-field__label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--c-text-soft);
+}
+.gallery-card__meta .form-field--narrow { max-width: 120px; }
+.gallery-card__delete { margin: 0; text-align: right; }
+
 @media (max-width: 620px) {
   .admin-toolbar { flex-direction: column; align-items: stretch; }
   .admin-header__inner { flex-wrap: wrap; }
