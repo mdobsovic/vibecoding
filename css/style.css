@@ -1,0 +1,432 @@
+/* =========================================================
+   Michal Dobsovic - osobna stranka
+   Svetly, cisty styl. Akcenty: modra + zelena.
+   ========================================================= */
+
+/* ---------- Design tokeny ---------- */
+:root {
+  /* Farby */
+  --c-blue:        #2563eb;
+  --c-blue-dark:   #1e40af;
+  --c-green:       #10b981;
+  --c-green-dark:  #059669;
+
+  --c-bg:          #ffffff;
+  --c-bg-alt:      #f4f7fb;
+  --c-surface:     #ffffff;
+
+  --c-text:        #0f172a;   /* tmavomodra */
+  --c-text-soft:   #475569;
+  --c-border:      #e2e8f0;
+
+  /* Pisma */
+  --font-sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+  /* Tvar a tien */
+  --radius:    16px;
+  --radius-sm: 10px;
+  --shadow:    0 10px 30px -12px rgba(15, 23, 42, 0.18);
+  --shadow-sm: 0 4px 14px -8px rgba(15, 23, 42, 0.25);
+
+  /* Layout */
+  --container: 1120px;
+  --gradient: linear-gradient(120deg, var(--c-blue), var(--c-green));
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--c-text);
+  background: var(--c-bg);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { line-height: 1.2; margin: 0; }
+
+a { color: var(--c-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img { max-width: 100%; display: block; }
+
+/* ---------- Layout pomocnik ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.text-gradient {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Tlacidla ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  text-decoration: none;
+}
+.btn:hover { text-decoration: none; transform: translateY(-2px); }
+
+.btn--primary {
+  background: var(--gradient);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--c-text);
+  border-color: var(--c-border);
+}
+.btn--ghost:hover { border-color: var(--c-blue); color: var(--c-blue); }
+.btn--full { width: 100%; }
+
+/* ---------- Hlavicka / navigacia ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--c-border);
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 70px;
+}
+.nav__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--c-text);
+  font-weight: 800;
+}
+.nav__logo:hover { text-decoration: none; }
+.nav__logo-mark {
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: var(--gradient);
+  color: #fff;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+.nav__menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav__menu a {
+  color: var(--c-text-soft);
+  font-weight: 600;
+  font-size: 0.96rem;
+}
+.nav__menu a:hover { color: var(--c-text); text-decoration: none; }
+.nav__cta {
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--c-bg-alt);
+  color: var(--c-text) !important;
+}
+.nav__cta:hover { background: #e7eef9; }
+
+/* Hamburger - skryty na desktope */
+.nav__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 8px;
+}
+.nav__toggle span {
+  width: 24px; height: 2px;
+  background: var(--c-text);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 80px 0 64px;
+  background:
+    radial-gradient(60% 60% at 85% 10%, rgba(16, 185, 129, 0.10), transparent 70%),
+    radial-gradient(50% 50% at 10% 0%, rgba(37, 99, 235, 0.10), transparent 70%);
+}
+.hero__inner {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.hero__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--c-green-dark);
+  margin: 0 0 14px;
+}
+.hero__title {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.hero__lead {
+  margin: 20px 0 28px;
+  font-size: 1.12rem;
+  color: var(--c-text-soft);
+  max-width: 48ch;
+}
+.hero__actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.hero__photo { display: grid; place-items: center; }
+/* Kruhova fotka s modro-zelenym gradientovym prstencom.
+   Ramik ma vynuteny pomer 1:1, takze je to vzdy presny kruh.
+   Max. 500 px na sirku aj vysku. */
+.hero__photo-frame {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
+  padding: 5px;
+  border-radius: 50%;
+  background: var(--gradient);
+  box-shadow: var(--shadow);
+}
+.hero__photo-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* obrazok je stvorcovy ako ramik, takze sa subjekt neoreze */
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid var(--c-surface);
+}
+
+/* ---------- Sekcie ---------- */
+.section { padding: 72px 0; }
+.section--alt { background: var(--c-bg-alt); }
+.section__head { max-width: 640px; margin-bottom: 40px; }
+.section__title {
+  font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.section__subtitle {
+  margin: 10px 0 0;
+  color: var(--c-text-soft);
+  font-size: 1.05rem;
+}
+
+/* ---------- O mne ---------- */
+.about {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.about__text p { margin: 0 0 16px; color: var(--c-text-soft); font-size: 1.05rem; }
+
+.skills { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.skill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+.skill__dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gradient);
+  flex: none;
+}
+
+/* ---------- Projekty ---------- */
+.projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.project-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: rgba(37, 99, 235, 0.35);
+}
+.project-card__top { margin-bottom: 14px; }
+.project-card__tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--c-green-dark);
+  background: rgba(16, 185, 129, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.project-card__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+.project-card__desc { color: var(--c-text-soft); margin: 0 0 18px; }
+.project-card__tech { display: flex; flex-wrap: wrap; gap: 8px; }
+.project-card__tech span {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--c-bg-alt);
+  color: var(--c-text-soft);
+}
+
+/* ---------- Kontakt ---------- */
+.contact {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.contact-form {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 18px;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.form-field { display: grid; gap: 7px; }
+.form-field__label { font-weight: 600; font-size: 0.9rem; }
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--c-text);
+  padding: 12px 14px;
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  resize: vertical;
+}
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.contact-form__note {
+  margin: 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--c-text-soft);
+}
+
+.contact-info {
+  background: var(--gradient);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+.contact-info__title { font-size: 1.2rem; margin-bottom: 18px; }
+.contact-info__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.contact-info__list li { display: grid; gap: 4px; }
+.contact-info__label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  opacity: 0.85;
+}
+.contact-info a { color: #fff; font-weight: 700; text-decoration: underline; }
+
+/* ---------- Paticka ---------- */
+.site-footer {
+  border-top: 1px solid var(--c-border);
+  padding: 28px 0;
+  background: var(--c-bg);
+}
+.site-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--c-text-soft);
+  font-size: 0.92rem;
+}
+.site-footer__up { font-weight: 600; }
+
+/* ---------- Responzivita ---------- */
+@media (max-width: 860px) {
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__photo { order: -1; }
+  .about,
+  .contact { grid-template-columns: 1fr; }
+
+  /* Mobilna navigacia */
+  .nav__toggle { display: flex; }
+  .nav__menu {
+    position: absolute;
+    top: 70px; left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    background: var(--c-surface);
+    border-bottom: 1px solid var(--c-border);
+    padding: 16px 24px 22px;
+    box-shadow: var(--shadow);
+    display: none;
+  }
+  .nav__menu.is-open { display: flex; }
+  .nav__menu a { padding: 10px 4px; }
+  .nav__cta { text-align: center; }
+}
+
+@media (max-width: 520px) {
+  .form-row { grid-template-columns: 1fr; }
+  .hero { padding: 56px 0 48px; }
+  .nav__logo-text { display: none; }
+}
+
+/* ---------- Pristupnost ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Osobna stranka a rozcestnik projektov Michala Dobsovica - lektora IT skoleni.">
+  <title>Michal Dobšovič — IT lektor a rozcestník projektov</title>
+
+  <!-- Pisma: Manrope (text) a JetBrains Mono (ukazky kodu) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Kotva uplne na vrchu stranky (mimo sticky hlavicky, aby skrolovanie hore fungovalo) -->
+  <span id="top"></span>
+
+  <!-- Navigacia -->
+  <header class="site-header">
+    <nav class="nav container">
+      <a href="#top" class="nav__logo">
+        <span class="nav__logo-mark">MD</span>
+        <span class="nav__logo-text">Michal Dobšovič</span>
+      </a>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Otvoriť menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav__menu" id="navMenu">
+        <li><a href="#o-mne">O mne</a></li>
+        <li><a href="#projekty">Projekty</a></li>
+        <li><a href="#kontakt" class="nav__cta">Kontakt</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Hero / uvod -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <p class="hero__eyebrow">IT lektor · IT LEARNING SLOVAKIA</p>
+          <h1 class="hero__title">
+            Ahoj, som <span class="text-gradient">Michal Dobšovič</span>
+          </h1>
+          <p class="hero__lead">
+            Venujem sa školeniam v oblasti serverov, počítačových sietí,
+            vývoja webových aplikácií a databáz. Táto stránka je rozcestníkom
+            mojich projektov.
+          </p>
+          <div class="hero__actions">
+            <a href="#projekty" class="btn btn--primary">Pozrieť projekty</a>
+            <a href="#kontakt" class="btn btn--ghost">Napísať mi</a>
+          </div>
+        </div>
+
+        <!-- Fotografia autora -->
+        <div class="hero__photo">
+          <div class="hero__photo-frame">
+            <img src="img/michal-dobsovic.jpg"
+                 alt="Michal Dobšovič — IT lektor"
+                 width="1000" height="1000"
+                 loading="eager">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- O mne -->
+    <section class="section" id="o-mne">
+      <div class="container">
+        <header class="section__head">
+          <h2 class="section__title">O mne</h2>
+          <p class="section__subtitle">Čomu sa venujem a v čom školím.</p>
+        </header>
+
+        <div class="about">
+          <div class="about__text">
+            <p>
+              Som lektor v <a href="https://www.itlearning.sk" target="_blank" rel="noopener">IT LEARNING SLOVAKIA</a>.
+              Zameriavam sa predovšetkým na praktické školenia, kde sa snažím
+              odovzdávať skúsenosti zrozumiteľne a s dôrazom na reálne použitie.
+            </p>
+            <p>
+              Ak hľadáš školenie alebo spoluprácu v niektorej z týchto oblastí,
+              neváhaj ma kontaktovať.
+            </p>
+          </div>
+
+          <ul class="skills">
+            <li class="skill"><span class="skill__dot"></span>Windows Server</li>
+            <li class="skill"><span class="skill__dot"></span>Linuxové servery</li>
+            <li class="skill"><span class="skill__dot"></span>Počítačové siete — najmä MikroTik</li>
+            <li class="skill"><span class="skill__dot"></span>Vývoj web aplikácií (HTML, JS, CSS, PHP)</li>
+            <li class="skill"><span class="skill__dot"></span>Databázy — MS SQL Server a MySQL / MariaDB</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projekty -->
+    <section class="section section--alt" id="projekty">
+      <div class="container">
+        <header class="section__head">
+          <h2 class="section__title">Moje projekty</h2>
+          <p class="section__subtitle">Výber projektov, ktorý budem postupne dopĺňať.</p>
+        </header>
+
+        <!-- Ukazkove karty - obsah sa doplni neskor v ramci funkcionality Projekty -->
+        <div class="projects">
+          <article class="project-card">
+            <div class="project-card__top">
+              <span class="project-card__tag">Pripravuje sa</span>
+            </div>
+            <h3 class="project-card__title">Názov projektu</h3>
+            <p class="project-card__desc">
+              Krátky popis projektu sa zobrazí tu. Karty budú doplnené neskôr.
+            </p>
+            <div class="project-card__tech">
+              <span>HTML</span><span>CSS</span><span>JS</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-card__top">
+              <span class="project-card__tag">Pripravuje sa</span>
+            </div>
+            <h3 class="project-card__title">Názov projektu</h3>
+            <p class="project-card__desc">
+              Krátky popis projektu sa zobrazí tu. Karty budú doplnené neskôr.
+            </p>
+            <div class="project-card__tech">
+              <span>PHP</span><span>MariaDB</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-card__top">
+              <span class="project-card__tag">Pripravuje sa</span>
+            </div>
+            <h3 class="project-card__title">Názov projektu</h3>
+            <p class="project-card__desc">
+              Krátky popis projektu sa zobrazí tu. Karty budú doplnené neskôr.
+            </p>
+            <div class="project-card__tech">
+              <span>MikroTik</span><span>Siete</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kontakt -->
+    <section class="section" id="kontakt">
+      <div class="container">
+        <header class="section__head">
+          <h2 class="section__title">Kontakt</h2>
+          <p class="section__subtitle">Napíš mi a ozvem sa ti.</p>
+        </header>
+
+        <div class="contact">
+          <!-- Vizualny navrh formulara. Odosielanie sa doplni neskor (PHP). -->
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-row">
+              <label class="form-field">
+                <span class="form-field__label">Meno</span>
+                <input type="text" name="meno" placeholder="Tvoje meno" required>
+              </label>
+
+              <label class="form-field">
+                <span class="form-field__label">E-mail</span>
+                <input type="email" name="email" placeholder="tvoj@email.sk" required>
+              </label>
+            </div>
+
+            <label class="form-field">
+              <span class="form-field__label">Predmet</span>
+              <input type="text" name="predmet" placeholder="O čo ide?">
+            </label>
+
+            <label class="form-field">
+              <span class="form-field__label">Správa</span>
+              <textarea name="sprava" rows="5" placeholder="Tvoja správa..." required></textarea>
+            </label>
+
+            <button type="submit" class="btn btn--primary btn--full">Odoslať správu</button>
+            <p class="contact-form__note">Odosielanie formulára bude doplnené v ďalšom kroku.</p>
+          </form>
+
+          <aside class="contact-info">
+            <h3 class="contact-info__title">Ďalšie možnosti</h3>
+            <ul class="contact-info__list">
+              <li>
+                <span class="contact-info__label">Spoločnosť</span>
+                <a href="https://www.itlearning.sk" target="_blank" rel="noopener">IT LEARNING SLOVAKIA</a>
+              </li>
+              <li>
+                <span class="contact-info__label">Zameranie</span>
+                <span>Servery · Siete · Web · Databázy</span>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Paticka -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© <span id="year"></span> Michal Dobšovič</p>
+      <a href="#top" class="site-footer__up">Späť hore ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

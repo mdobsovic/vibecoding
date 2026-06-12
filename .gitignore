@@ -1,0 +1,28 @@
+# Citlive udaje - nikdy necommitovat
+*.env
+.env
+.env.*
+config.local.php
+secrets.php
+*.key
+*.pem
+
+# OS subory
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Editory / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logy a docasne subory
+*.log
+tmp/
+temp/
+
+# Lokalne nastavenia Claude Code (osobne, nepatria do gitu)
+.claude/settings.local.json
