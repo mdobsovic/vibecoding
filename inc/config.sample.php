@@ -39,4 +39,15 @@ return [
 
     // Prepinac: ked bude true, projekty sa budu citat z databazy (zatial false -> staticke pole)
     'use_db_projects' => false,
+
+    // Prihlasenie do admin rozhrania (/admin).
+    // Hash hesla vygeneruj cez tools/make-hash.php a vloz sem (nikdy neukladaj heslo v ciste).
+    'admin' => [
+        'user'      => 'admin',
+        'pass_hash' => '',   // vystup z password_hash() - VYPLNIT na serveri
+    ],
+
+    // Koren webu. Necha sa '/', ak stranka bezi priamo na domene.
+    // Zmen na napr. '/podpriecinok/' ak bezi v podpriecinku (kvoli peknym URL a asset cestam).
+    'base_url' => '/',
 ];

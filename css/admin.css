@@ -1,0 +1,185 @@
+/* ============================================================
+   Styly admin rozhrania (/admin).
+   Nadvazuje na premenne a komponenty z css/style.css.
+   ============================================================ */
+
+body.admin {
+  background: var(--c-bg-alt);
+}
+
+/* ---------- Hlavicka ---------- */
+.admin-header {
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  box-shadow: var(--shadow-sm);
+}
+.admin-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+}
+.admin-header__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--c-text);
+}
+.admin-header__logo:hover { text-decoration: none; }
+.admin-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.admin-header__nav a { font-weight: 600; color: var(--c-text-soft); }
+.admin-header__nav a:hover { color: var(--c-blue); }
+.admin-header__logout { margin: 0; }
+
+/* ---------- Obsah ---------- */
+.admin-main {
+  padding: 32px 24px 64px;
+  min-height: 60vh;
+}
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.admin-title { font-size: 1.6rem; font-weight: 800; margin: 0; }
+.admin-empty {
+  background: var(--c-surface);
+  border: 1px dashed var(--c-border);
+  border-radius: var(--radius);
+  padding: 32px;
+  text-align: center;
+  color: var(--c-text-soft);
+}
+
+/* ---------- Tabulka projektov ---------- */
+.admin-table-wrap {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.admin-table th,
+.admin-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--c-border);
+  vertical-align: middle;
+}
+.admin-table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--c-text-soft);
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table__slug {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--c-text-soft);
+  margin-top: 2px;
+}
+.admin-table__actions { white-space: nowrap; text-align: right; }
+.admin-inline-form { display: inline; margin: 0; }
+
+/* ---------- Stitky stavu ---------- */
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.badge--on { background: rgba(16, 185, 129, 0.14); color: var(--c-green-dark); }
+.badge--off { background: rgba(100, 116, 139, 0.16); color: var(--c-text-soft); }
+
+/* ---------- Tlacidla navyse ---------- */
+.btn--sm { padding: 7px 14px; font-size: 0.85rem; }
+.btn--danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+.btn--danger:hover { background: #fecaca; color: #991b1b; }
+
+/* ---------- Formulare ---------- */
+.admin-form {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 18px;
+}
+.admin-form--wide { max-width: 760px; }
+.admin-login { max-width: 420px; margin: 40px auto; }
+.admin-login__title { font-size: 1.4rem; font-weight: 800; margin-bottom: 18px; text-align: center; }
+
+.form-field__hint {
+  color: var(--c-text-soft);
+  font-size: 0.82rem;
+}
+.form-field__hint code {
+  font-family: var(--font-mono);
+  background: var(--c-bg-alt);
+  padding: 1px 5px;
+  border-radius: 5px;
+}
+.form-field--narrow { max-width: 160px; }
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+.form-check input { width: 18px; height: 18px; }
+
+.admin-form__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---------- WYSIWYG (Trix) ---------- */
+trix-editor {
+  background: var(--c-bg);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  min-height: 220px;
+  font-size: 1rem;
+}
+trix-editor:focus { border-color: var(--c-blue); }
+trix-toolbar .trix-button-group {
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Paticka ---------- */
+.admin-footer {
+  border-top: 1px solid var(--c-border);
+  padding: 20px 0;
+  color: var(--c-text-soft);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+@media (max-width: 620px) {
+  .admin-toolbar { flex-direction: column; align-items: stretch; }
+  .admin-header__inner { flex-wrap: wrap; }
+  .form-row { grid-template-columns: 1fr; }
+}

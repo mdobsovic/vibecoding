@@ -1,0 +1,14 @@
+# ============================================================
+#  Pekne URL pre detail projektu a zakladne nastavenia
+# ============================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Detail projektu: /projekt/<slug>  ->  projekt.php?slug=<slug>
+    # (existujuce subory a priecinky ako /index.php, /admin/, /api/, /css/ ostavaju nedotknute)
+    RewriteRule ^projekt/([A-Za-z0-9-]+)/?$ projekt.php?slug=$1 [L,QSA]
+</IfModule>
+
+# UTF-8 ako vychodzie kodovanie pre textovy obsah
+AddDefaultCharset UTF-8

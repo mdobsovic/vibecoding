@@ -54,3 +54,41 @@ function is_ajax(): bool
     return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 }
+
+/**
+ * Zostavi URL k assetu / internemu odkazu s ohladom na base_url z konfiguracie.
+ * Vdaka tomu cesty funguju aj na podstrankach (/projekt/...) a v adminovi (/admin/...).
+ * Priklad: asset('css/style.css') -> '/css/style.css'
+ */
+function asset(string $path): string
+{
+    global $config;
+    $base = isset($config['base_url']) && $config['base_url'] !== '' ? $config['base_url'] : '/';
+    // Kotvy a absolutne URL nechame tak (napr. '#kontakt' nizsie riesi base osobitne)
+    return rtrim($base, '/') . '/' . ltrim($path, '/');
+}
+
+/**
+ * Prevedie text (nazov projektu) na URL slug.
+ * Slovenska diakritika sa prevadza cez rucnu mapu (iconv//TRANSLIT je na hostingu nespolahlivy).
+ */
+function slugify(string $text): string
+{
+    $map = [
+        'á' => 'a', 'ä' => 'a', 'č' => 'c', 'ď' => 'd', 'é' => 'e', 'ě' => 'e',
+        'í' => 'i', 'ĺ' => 'l', 'ľ' => 'l', 'ň' => 'n', 'ó' => 'o', 'ô' => 'o',
+        'ŕ' => 'r', 'š' => 's', 'ť' => 't', 'ú' => 'u', 'ů' => 'u', 'ý' => 'y',
+        'ž' => 'z', 'ł' => 'l', 'ż' => 'z', 'ź' => 'z', 'ć' => 'c', 'ę' => 'e',
+        'ą' => 'a', 'ö' => 'o', 'ü' => 'u', 'ß' => 'ss',
+    ];
+
+    // Najprv na male pismena (mb kvoli diakritike), potom prevod podla mapy
+    $text = mb_strtolower($text, 'UTF-8');
+    $text = strtr($text, $map);
+
+    // Vsetko ostatne nealfanumericke nahradime pomlckou
+    $text = preg_replace('~[^a-z0-9]+~', '-', $text);
+    $text = trim((string) $text, '-');
+
+    return $text !== '' ? $text : 'projekt';
+}

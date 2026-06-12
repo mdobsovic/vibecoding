@@ -101,7 +101,9 @@ require __DIR__ . '/inc/partials/header.php';
               <?php foreach ($p['tech'] as $t): ?><span><?= e($t) ?></span><?php endforeach; ?>
             </div>
             <?php endif; ?>
-            <?php if (!empty($p['url'])): ?>
+            <?php if (!empty($p['slug'])): ?>
+            <a class="project-card__link" href="<?= e(asset('projekt/' . $p['slug'])) ?>">Zobraziť projekt →</a>
+            <?php elseif (!empty($p['url'])): ?>
             <a class="project-card__link" href="<?= e($p['url']) ?>" target="_blank" rel="noopener">Zobraziť projekt →</a>
             <?php endif; ?>
           </article>

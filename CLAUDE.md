@@ -33,8 +33,10 @@ Michal Dobsovic je lektor v IT LEARNING SLOVAKIA (www.itlearning.sk) a zameriava
 
 1. [HOTOVO] Zakladna struktura stranky + design.
 2. [HOTOVO] Funkcionalita kontaktneho formulara + prechod zo statickej stranky na PHP.
-3. [PRIPRAVENE] Funkcionalita "Moje projekty" - DB vrstva je pripravena, zostava zapnut citanie
-   projektov z databazy a doplnit ich spravu.
+3. [HOTOVO] Funkcionalita "Moje projekty" - projekty sa citaju z databazy, kazdy ma vlastnu
+   detailnu podstranku (`/projekt/<slug>`) a admin rozhranie na `/admin` (prihlasenie + CRUD).
+4. [PRIPRAVENE] Galeria obrazkov k projektom - DB tabulka `projekt_obrazky` je pripravena,
+   zostava doplnit nahravanie a spravu obrazkov v adminovi a ich zobrazenie na detaile.
 
 ## Struktura projektu
 
@@ -42,18 +44,26 @@ Stranka je dynamicka (PHP). Vstupny bod je `index.php`, ktory sklada sekcie a vy
 casti a pomocne moduly:
 
 - `index.php` - hlavna stranka (sklada partials, generuje projekty, obsahuje kontaktny formular)
+- `projekt.php` - detailna podstranka projektu (`/projekt/<slug>` cez `.htaccess` rewrite)
+- `.htaccess` (root) - pekne URL pre detail projektu
 - `inc/bootstrap.php` - spolocny zaklad (nacita config, session, helpers); volat na zaciatku kazdeho PHP vstupu
 - `inc/config.sample.php` - VZOR konfiguracie (commituje sa)
-- `inc/config.php` - SKUTOCNA konfiguracia s heslami (SMTP/DB); je v `.gitignore`, NIKDY sa necommituje
-- `inc/helpers.php` - `e()` (escape), `csrf_token()`, `csrf_check()`, `json_response()`, `is_ajax()`
+- `inc/config.php` - SKUTOCNA konfiguracia s heslami (SMTP/DB/admin); je v `.gitignore`, NIKDY sa necommituje
+- `inc/helpers.php` - `e()`, `csrf_token()`, `csrf_check()`, `json_response()`, `is_ajax()`, `asset()`, `slugify()`
 - `inc/mailer.php` - `send_contact_mail()` (odoslanie cez SMTP pomocou PHPMailer)
-- `inc/db.php` - `db()` lazy PDO pripojenie (pouzije sa az pri projektoch z DB)
-- `inc/Projects.php` - repozitar projektov (`Projects::all()`)
-- `inc/partials/header.php`, `inc/partials/footer.php` - spolocne casti stranky
+- `inc/db.php` - `db()` lazy PDO pripojenie (projekty z DB)
+- `inc/Projects.php` - repozitar projektov (`all()`, `findBySlug()`, admin CRUD)
+- `inc/admin_auth.php` - prihlasenie do admina (`is_admin()`, `admin_login()`, `require_admin()`, `admin_logout()`)
+- `inc/partials/header.php`, `inc/partials/footer.php` - spolocne casti verejnej stranky
+- `inc/partials/admin-header.php`, `inc/partials/admin-footer.php` - spolocne casti admin rozhrania
+- `admin/` - admin rozhranie: `login.php`, `logout.php`, `index.php` (zoznam),
+  `projekt-form.php` (formular), `projekt-save.php`, `projekt-delete.php`
 - `api/kontakt.php` - spracovanie kontaktneho formulara (validacia, anti-spam, odoslanie)
-- `lib/PHPMailer/` - prilozena kniznica na odosielanie e-mailov (bez Composera)
-- `sql/schema.sql` - schema databazy (tabulka `projekty`)
-- `css/`, `js/`, `img/` - styly, skripty, obrazky
+- `lib/PHPMailer/` - prilozena kniznica na odosielanie e-mailov (bez Composera; serverova, nepristupna z webu)
+- `vendor/trix/` - WYSIWYG editor Trix (CSS + JS), nacitavany prehliadacom v adminovi
+- `tools/make-hash.php` - pomocnik na vygenerovanie hashu admin hesla (po pouziti ZMAZAT, nenahravat)
+- `sql/schema.sql` - schema databazy (`projekty`, `projekt_obrazky`)
+- `css/style.css`, `css/admin.css`, `js/`, `img/` - styly, skripty, obrazky
 
 ## Konfiguracia a nasadenie
 
@@ -72,6 +82,9 @@ casti a pomocne moduly:
   e-mail navstevnika cez Reply-To.
 - Projekty z databazy: importuj `sql/schema.sql`, vypln `db` v configu a nastav
   `use_db_projects = true`.
+- Admin rozhranie (`/admin`): v configu vypln `admin.user` a `admin.pass_hash`. Hash hesla
+  vygeneruj cez `tools/make-hash.php` (docasne nahraj, vygeneruj, vloz do configu, subor ZMAZ).
+  Nastav aj `base_url` (zvycajne `'/'`) kvoli peknym URL a asset cestam mimo korena.
 
 ## Nahravanie na hosting (SFTP)
 
@@ -81,30 +94,41 @@ potrebne pre chod stranky (nie vyvojove/git subory).
 
 NAHRAT (potrebne pre chod):
 - `index.php`
+- `projekt.php`
+- `.htaccess` (root - pekne URL pre detail projektu)
 - `css/style.css`
+- `css/admin.css`
 - `js/main.js`
 - `img/` (obrazky, napr. `img/michal-dobsovic.jpg`)
 - `inc/bootstrap.php`
 - `inc/helpers.php`
 - `inc/mailer.php`
 - `inc/Projects.php`
+- `inc/db.php`
+- `inc/admin_auth.php`
 - `inc/partials/header.php`
 - `inc/partials/footer.php`
+- `inc/partials/admin-header.php`
+- `inc/partials/admin-footer.php`
 - `inc/.htaccess`
 - `inc/config.php` - VYTVORIT priamo na serveri z `config.sample.php` a vyplnit hesla
   (nie je v gite; ak sa upravuje lokalne, nahrat tiez)
 - `api/kontakt.php`
+- `admin/login.php`, `admin/logout.php`, `admin/index.php`,
+  `admin/projekt-form.php`, `admin/projekt-save.php`, `admin/projekt-delete.php`
+- `vendor/trix/trix.css`, `vendor/trix/trix.umd.min.js`
+- `sql/schema.sql` (na import do DB)
 - `lib/.htaccess`
 - `lib/PHPMailer/PHPMailer.php`
 - `lib/PHPMailer/SMTP.php`
 - `lib/PHPMailer/Exception.php`
 
 VOLITELNE:
-- `inc/db.php` a `sql/schema.sql` - az ked sa zapnu projekty z databazy (`use_db_projects = true`)
 - `inc/config.sample.php` - hodi sa ako vzor na serveri
 - `lib/PHPMailer/LICENSE` - kvoli licencnej cistote (odporucane ponechat)
 
-NENAHRAVAT (zbytocne / nepatria na web):
+NENAHRAVAT (zbytocne / nepatria na web / bezpecnost):
+- `tools/make-hash.php` - len docasne na vygenerovanie admin hashu, potom ZMAZAT
 - `.git/`, `.gitignore`, `.gitattributes`
 - `CLAUDE.md`, `README.txt`
 - `.claude/`
